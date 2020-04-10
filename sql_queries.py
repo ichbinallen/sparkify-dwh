@@ -114,11 +114,18 @@ CREATE TABLE time (
 staging_events_copy = ("""
 COPY staging_events
 FROM {}
-IAM_ROLE AS 'aws_iam_role={}'
-JSON {}
+ACCESS_KEY_ID '{}'
+SECRET_ACCESS_KEY '{}'
+JSON AS {}
 REGION 'us-west-2'
+TIMEFORMAT as 'epochmillisecs'
 ;
-""").format(config["S3"]["LOG_DATA"], config["IAM_ROLE"]["ARN"], config["S3"]["LOG_JSONPATH"])
+""").format(
+    config["S3"]["LOG_DATA"],
+    config["IAM_ROLE"]["KEY"],
+    config["IAM_ROLE"]["SECRET"],
+    config["S3"]["LOG_JSONPATH"]
+)
 
 
 staging_songs_copy = ("""
